@@ -79,7 +79,7 @@ private func computeLayout(total: Int, in size: CGSize) -> GridLayout {
     )
 }
 
-final class SwitcherOverlay {
+final class Overlay {
     private let window: NSWindow
     private let host = NSHostingController(rootView: SwitcherView(items: [], index: 0, onTapIndex: { _ in }))
     private var items: [AppItem] = []

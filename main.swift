@@ -29,7 +29,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String
             ?? ProcessInfo.processInfo.processName
     }
-    private var overlay: SwitcherOverlay?
+    private var overlay: Overlay?
     private var statusItem: NSStatusItem?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -283,7 +283,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         switching = true
 
         if overlay == nil {
-            overlay = SwitcherOverlay()
+            overlay = Overlay()
             overlay?.onActivate = { [weak self] app in
                 guard let self else { return }
                 self.logger.info("Click-activate \(app.bundleIdentifier ?? "none").")

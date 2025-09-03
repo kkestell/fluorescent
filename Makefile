@@ -3,7 +3,7 @@ BUILD_DIR := build
 SDK := $(shell xcrun --sdk macosx --show-sdk-path)
 SWIFTC := xcrun --sdk macosx swiftc
 
-SRC := main.swift SwitcherOverlay.swift
+SRC := main.swift overlay.swift
 FLAGS := -O -parse-as-library -sdk $(SDK) -target arm64-apple-macos13 \
     -framework AppKit -framework SwiftUI -framework CoreGraphics -framework Carbon -framework IOKit
 

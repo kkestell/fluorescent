@@ -4,11 +4,11 @@ A less frustrating app switcher for macOS.
 
 ![Fluorescent in action](screenshot.avif)
 
-Have you ever pressed command + tab only to switch to the wrong app because your mouse cursor was in the way? Annoying, right?
+Ever hit Command-Tab and ended up in the wrong app just because your mouse pointer happened to be in the way? Annoying, right?
 
 ## Features
 
-* Works just like the native macOS app switcher except the mouse cursor won't hijack your selection, so you always switch to the app you intended.
+* Works like you'd expect.
 * Simple, unobtrusive design.
 * Nothing else. No preferences, telemetry, or automatic updates.
 
