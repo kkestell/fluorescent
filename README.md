@@ -8,7 +8,7 @@ Ever hit Command-Tab and ended up in the wrong app just because your mouse point
 
 ## Features
 
-* Works like you'd expect.
+* Works just like the native macOS app switcher except the mouse won't hijack your selection.
 * Simple, unobtrusive design.
 * Nothing else. No preferences, telemetry, or automatic updates.
 
