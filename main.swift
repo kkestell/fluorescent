@@ -109,6 +109,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let opts = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: prompt] as CFDictionary
         return AXIsProcessTrustedWithOptions(opts)
     }
+    
+    private func raiseAllWindows(of app: NSRunningApplication) {
+        let axApp = AXUIElementCreateApplication(app.processIdentifier)
+        var value: CFTypeRef?
+        let err = AXUIElementCopyAttributeValue(axApp, kAXWindowsAttribute as CFString, &value)
+        guard err == .success, let windows = value as? [AXUIElement] else { return }
+        for w in windows {
+            var minimizedRef: CFTypeRef?
+            if AXUIElementCopyAttributeValue(w, kAXMinimizedAttribute as CFString, &minimizedRef) == .success {
+                if let minimized = minimizedRef as? Bool, minimized { continue }
+            }
+            _ = AXUIElementPerformAction(w, kAXRaiseAction as CFString)
+        }
+    }
 
     private func installStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -308,6 +322,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self.logger.info("Click-activate \(app.bundleIdentifier ?? "none").")
                 self.end()
                 app.activate(options: [.activateIgnoringOtherApps])
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    self.raiseAllWindows(of: app)
+                }
             }
         }
 
@@ -335,6 +352,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logger.info("Committing switch to \((app?.bundleIdentifier ?? "none")).")
         end()
         app?.activate(options: [.activateIgnoringOtherApps])
+        if let app {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                self.raiseAllWindows(of: app)
+            }
+        }
     }
 
     private func cancel() {
