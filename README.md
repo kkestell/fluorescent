@@ -12,6 +12,10 @@ Ever hit Command-Tab and ended up in the wrong app just because your mouse point
 * Simple, unobtrusive design.
 * Nothing else. No preferences, telemetry, or automatic updates.
 
+## Use
+
+On first launch, you will be prompted for Input Monitoring and Accessibility permissions. Fluorescent will also register itself as a login item. You can exit the application by selecting "Quit Fluorescent" from the menu bar icon.
+
 ## License
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.

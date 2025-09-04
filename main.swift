@@ -5,6 +5,7 @@ import Carbon.HIToolbox
 import ApplicationServices
 import OSLog
 import IOKit
+import ServiceManagement
 
 @main
 struct FluorescentApp: App {
@@ -36,6 +37,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logger.info("Application starting up.")
         NSApp.setActivationPolicy(.accessory)
 
+        // Register launch at login on first run
+        registerLaunchAtLoginIfFirstRun()
+
         NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification,
             object: nil, queue: .main
@@ -48,8 +52,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         installStatusItem()
         seedMRUIfNeeded()
         
-        setupPollingTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+        setupPollingTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
             self?.checkPermissionsAndFinalizeSetup()
+        }
+    }
+
+    private func registerLaunchAtLoginIfFirstRun() {
+        guard #available(macOS 13.0, *) else { return }
+        let defaults = UserDefaults.standard
+        let key = "HasRegisteredLaunchAtLogin"
+        if !defaults.bool(forKey: key) {
+            do {
+                try SMAppService.mainApp.register()
+                defaults.set(true, forKey: key)
+                logger.info("Registered app to launch at login (first run).")
+            } catch {
+                logger.error("Failed to register launch at login: \(String(describing: error))")
+            }
         }
     }
 
