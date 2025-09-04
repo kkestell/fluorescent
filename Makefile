@@ -29,7 +29,6 @@ bundle: build
 	cp Info.plist $(APP_NAME).app/Contents/Info.plist
 	cp $(BUILD_DIR)/$(APP_NAME) $(APP_NAME).app/Contents/MacOS/$(APP_NAME)
 	printf "APPL????" > $(APP_NAME).app/Contents/PkgInfo
-	# Ad-hoc sign so Gatekeeper shows “unsigned developer” dialog (no paid cert required)
 	codesign --force --deep -s - $(APP_NAME).app
 
 dmg: bundle
@@ -47,4 +46,6 @@ run: bundle
 
 clean:
 	rm -rf $(BUILD_DIR) $(APP_NAME).app "$(DMG_DIR)" "$(DMG)"
-	tccutil reset All org.kestell.fluorescent
+	
+reset:
+	ccutil reset All org.kestell.fluorescent
