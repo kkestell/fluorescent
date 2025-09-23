@@ -79,6 +79,11 @@ private func computeLayout(total: Int, in size: CGSize) -> GridLayout {
     )
 }
 
+private func screenUnderMouse() -> NSScreen? {
+    let p = NSEvent.mouseLocation
+    return NSScreen.screens.first { $0.frame.contains(p) } ?? NSScreen.main
+}
+
 final class Overlay {
     private let window: NSWindow
     private let host = NSHostingController(rootView: SwitcherView(items: [], index: 0, onTapIndex: { _ in }))
@@ -92,8 +97,8 @@ final class Overlay {
     }
 
     init() {
-        let screen = NSScreen.main?.frame ?? .zero
-        window = NSWindow(contentRect: screen, styleMask: .borderless, backing: .buffered, defer: false)
+        let frame = screenUnderMouse()?.frame ?? .zero
+        window = NSWindow(contentRect: frame, styleMask: .borderless, backing: .buffered, defer: false)
         window.isOpaque = false
         window.backgroundColor = .clear
         window.level = .statusBar
@@ -102,10 +107,16 @@ final class Overlay {
         window.hasShadow = false
 
         window.contentView = host.view
-        host.view.frame = screen
+        host.view.frame = frame
         host.view.autoresizingMask = [.width, .height]
 
         hide()
+    }
+
+    private func relocateToMouseScreen() {
+        let frame = screenUnderMouse()?.frame ?? .zero
+        window.setFrame(frame, display: true)
+        host.view.frame = frame
     }
 
     func enableInteraction(_ enabled: Bool) {
@@ -151,7 +162,10 @@ final class Overlay {
         host.rootView = SwitcherView(items: items, index: index, onTapIndex: host.rootView.onTapIndex)
     }
 
-    func show() { window.orderFrontRegardless() }
+    func show() {
+        relocateToMouseScreen()
+        window.orderFrontRegardless()
+    }
     func hide() { window.orderOut(nil) }
 }
 

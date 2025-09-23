@@ -37,7 +37,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         logger.info("Application starting up.")
         NSApp.setActivationPolicy(.accessory)
 
-        // Register launch at login on first run
         registerLaunchAtLoginIfFirstRun()
 
         NSWorkspace.shared.notificationCenter.addObserver(
